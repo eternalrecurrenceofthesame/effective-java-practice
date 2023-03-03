@@ -113,10 +113,20 @@ Supplier<T> 인터페이스가 팩터리를 표현한 완벽한 예시이다.
  
 하위 타입이라면 무엇이든 생성할 수 있는 팩터리를 넘길 수 있다.
 
-클라이언트가 제공한 팩터리가 생성한 타일들로 구성된 모자이크를 만드는 메서드 예시
+클라이언트가 제공한 carFactory 로 원하는 Car 클래스를 만들고 이름을 출력 하는 예시
 
- ```
-Mosaic create(Supplier<? extends Tile> tileFactory) {...}
+```
+public static String create(Supplier<? extends Car> carFactory){
+Car car = carFactory.get();
+String carName = car.getCarName();
+
+return carName;
+}
+
+...
+
+String carName = CarFactory.create(BMWCar::new);
+System.out.println(carName);
 ```
 
 
