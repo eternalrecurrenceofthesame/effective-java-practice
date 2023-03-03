@@ -116,7 +116,7 @@ Supplier<T> 인터페이스가 팩터리를 표현한 완벽한 예시이다.
 클라이언트가 제공한 carFactory 로 원하는 Car 클래스를 만들고 이름을 출력 하는 예시
 
 ```
-public static String create(Supplier<? extends Car> carFactory){
+?? public static String create(Supplier<? extends Car> carFactory){
 Car car = carFactory.get();
 String carName = car.getCarName();
 
