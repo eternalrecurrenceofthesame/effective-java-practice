@@ -46,3 +46,24 @@ Pizza 를 추상 클래스 빌더로 만들고 구체 클래스인 NyPizza 가 P
 
 
 ## item 3 - private 생성자나 열거 타입으로 싱글턴임을 보증하라
+```
+public class Singleton{
+private static final Singleton INSTANCE = new Singleton();
+private Singlton(){}
+public static Singleton getInstance() {return INSTANCE;}
+
+private Object readResolve(){return INSTANCE;}
+
+public void method() {}
+```
+
+private static final 필드를 이용해서 객체를 생성하지 않고 사용할 수 있으며
+
+생성자를 private 로 막아서 다른 곳에서 이 객체를 생성할 수 없게 막아준다.
+
+그리고 static 메서드로 같은 인스턴스를 호출할 수 있다.
+
+**??** 싱글턴임을 보장해주는 readResolve 메서드를 이용해서 직렬화된 인스턴스를 역 직렬화 
+
+할 때마다 새로운 인스턴스가 만들어지는 것을 막아둔다. item 89
+
