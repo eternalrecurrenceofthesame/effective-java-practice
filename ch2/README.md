@@ -33,7 +33,9 @@
 선택 매개변수를 설정한 후 빌더 객체가 제공하는 build 메서드를 호출해 객체를 만들어서 반환하면 된다.
 
 
-* Pizza 를 추상 클래스 빌더로 만들고 구체 클래스인 NyPizza 가 Pizza 를 상속받는다.
+* NutritionFacts.class Pizza.class, NyPizza.class
+
+Pizza 를 추상 클래스 빌더로 만들고 구체 클래스인 NyPizza 가 Pizza 를 상속받는다.
 
 이렇게 함으로써 NyPizza 를 만들 때 필수 요소, Pizza 를 만들 때 필수 요소를 나눌 수 있고
 
