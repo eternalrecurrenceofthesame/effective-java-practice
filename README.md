@@ -32,4 +32,8 @@
 
 선택 매개변수를 설정한 후 빌더 객체가 제공하는 build 메서드를 호출해 객체를 만들어서 반환하면 된다.
 
-NutritionFacts, NyPizza, Pizza 클래스 참고.
+빌더 패턴은 계층적으로 설계된 클래스와 함께 사용하기 좋다.
+
+* NutritionFacts.class Pizza.class, NyPizza.class 참고.
+
+
