@@ -34,6 +34,10 @@
 
 빌더 패턴은 계층적으로 설계된 클래스와 함께 사용하기 좋다.
 
-* NutritionFacts.class Pizza.class, NyPizza.class 참고.
+즉 생성자나 정적 팩터리 메서드가 처리해야 할 매개변수가 많다면 빌더 패턴을 선택하자. 22p
+
+참고로 롬복 사용하면 훨씬 편하게 만들 수 있음...
+
+* NutritionFacts.class Pizza.class, NyPizza.class 
 
 
