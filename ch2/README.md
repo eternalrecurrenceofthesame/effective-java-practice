@@ -86,4 +86,49 @@ private UtilityClass(){
 
 ## item 5 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
 
+```
+public class SpellChecker {
+private final Lexicon dictionary;
+
+public SpellChecker(Lexicon dictionary){
+this.dictionary = Objects.requireNonNull(dictionary);
+}
+public boolean isValid(String word) {...}
+public List<String> suggestions(String typo) {...}
+```
+
+사용하는 자원에 따라 동작이 달라지는 클래스는 자원을 직접 명시하지 않고 의존 객체 주입을 사용하라
+
+맞춤법 검사기에는 여러 가지 언어가 사용될 수 있고 여러 가지 사전이 사용된다.
+
+이때 싱글톤이나 정적 유틸리티 클래스로 만들어버리면 사전 하나에 하나의 클래스밖에 대응하지 못한다. 28p
+
+이 패턴의 변형으로 생성자에 자원 팩터리를 넘겨주는 방식이 있다.
+
+#### + 팩터리란 호출할 때마다 특정 타입의 인스턴스를 반복해서 만들어주는 객체를 의미한다.
+
+Supplier<T> 인터페이스가 팩터리를 표현한 완벽한 예시이다.
+ 
+팩터리의 타입 매개변수를 제한하고 클라이언트는 자신이 명시한 타입(Tile)의
+ 
+하위 타입이라면 무엇이든 생성할 수 있는 팩터리를 넘길 수 있다.
+
+클라이언트가 제공한 팩터리가 생성한 타일들로 구성된 모자이크를 만드는 메서드 예시
+
+ ```
+Mosaic create(Supplier<? extends Tile> tileFactory) {...}
+```
+
+
+
+#### ++ 팩토리 메서드 패턴
+팩터리 메서드 패턴이란 메서드의 호출에 대한 반환값으로 객체를 생산하는 디자인 패턴이다. https://huisam.tistory.com/entry/FactoryMethod
+
+
+사용 이유
+* 매개변수로 객체를 생성할 때 어떤 객체인지 예상 불가능할 때
+* 공통 분모를 가지는 부모클래스(car) 혹은 추상화된 인터페이스를 바탕으로 구성할 때
+* 복잡한 객체를 인스턴스화 하는 논리적인 로직을 따로 분리할 때
+
+Car.class, CarFactory.class 참고
 
