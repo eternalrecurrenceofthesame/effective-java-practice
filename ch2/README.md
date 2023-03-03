@@ -32,9 +32,9 @@
 
 선택 매개변수를 설정한 후 빌더 객체가 제공하는 build 메서드를 호출해 객체를 만들어서 반환하면 된다.
 
+* **NutritionFacts.class Pizza.class, NyPizza.class**
 
-* NutritionFacts.class Pizza.class, NyPizza.class
-
+```
 Pizza 를 추상 클래스 빌더로 만들고 구체 클래스인 NyPizza 가 Pizza 를 상속받는다.
 
 이렇게 함으로써 NyPizza 를 만들 때 필수 요소, Pizza 를 만들 때 필수 요소를 나눌 수 있고
@@ -42,6 +42,7 @@ Pizza 를 추상 클래스 빌더로 만들고 구체 클래스인 NyPizza 가 P
 정적 팩터리 메서드를 이용해서 의미가 명확해진다. 
 
 또한 각 계층마다 필수 매개변수, 선택 매개변수를 나눠서 설계가 가능하다. 
+```
 
 
 ## item 3 - private 생성자나 열거 타입으로 싱글턴임을 보증하라
