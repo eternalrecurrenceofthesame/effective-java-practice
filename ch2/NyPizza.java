@@ -17,8 +17,12 @@ public class NyPizza extends Pizza{
             this.size = Objects.requireNonNull(size);
         }
 
+
+        /**
+         * build, self 를 재정의 해서 자신을 반환.
+         */
         @Override
-        Pizza build() {
+        public NyPizza build() {
             return new NyPizza(this);
         }
 
@@ -36,8 +40,15 @@ public class NyPizza extends Pizza{
 
 
     public static void main(String[] args) {
-        Pizza pizza = new NyPizza.Builder(Size.SMALL)
+
+        /**
+         * 피자 만들기
+         */
+        NyPizza pizza = new NyPizza.Builder(Size.SMALL)
                 .addTopping(Topping.SAUSAGE).addTopping(Topping.ONION).build();
+
+        System.out.println(pizza);
+
     }
 
 
