@@ -26,6 +26,13 @@ public class CarFactory {
         }catch(NullPointerException e){
             throw new IllegalArgumentException("해당하는 차가 없습니다!");
         }
+        
+    public static String testCreate(Supplier<? extends Car> carFactory){
+        Car car = carFactory.get();
+        String carName = car.getCarName();
+
+        return carName;
+      }
     }
 
     public static void main(String[] args) {
