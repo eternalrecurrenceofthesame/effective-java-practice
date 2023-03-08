@@ -6,8 +6,7 @@
 
 1. 이름을 가질 수 있다.
 
-2. 호출될 때마다 인스턴스를 새로 생성하지 않아도 된다.
- ??
+2. 호출될 때마다 인스턴스를 새로 생성하지 않아도 된다. item 6 참고
 
 3. 반환 타입의 하위 타입 객체를 반환할 수 있는 능력이 있다.
 
@@ -113,12 +112,12 @@ Supplier<T> 인터페이스가 팩터리를 표현한 완벽한 예시이다.
  
 하위 타입이라면 무엇이든 생성할 수 있는 팩터리를 넘길 수 있다.
 
-클라이언트가 제공한 carFactory 로 원하는 Car 클래스를 만들고 이름을 출력 하는 예시
+클라이언트가 제공한 car 로 원하는 Car 클래스를 만들고 이름을 출력 하는 예시
 
 ```
-?? public static String create(Supplier<? extends Car> carFactory){
-Car car = carFactory.get();
-String carName = car.getCarName();
+public static String create(Supplier<? extends Car> car){
+Car car = car.get(); // BMW 생성
+String carName = car.getCarName();  // 이름을 반환
 
 return carName;
 }
@@ -141,4 +140,41 @@ System.out.println(carName);
 * 복잡한 객체를 인스턴스화 하는 논리적인 로직을 따로 분리할 때
 
 Car.class, CarFactory.class 참고
+
+
+## item 6 불필요한 객체 생성을 피하라
+
+```
+String s = new String("car1") // 따라하지 말 것!!
+-> String s = "car1"; //개선판
+
+
+/** 정적 팩터리 메서드 사용 */
+public static String create(Supplier<? extends Car> car){ 
+        Car car = car.get(); // car 하위 타입 생성
+        String carName = car.getCarName(); 
+
+        return carName;
+    }
+
+```
+생성자는 호출할 때마다 새로운 객체를 만들지만, 정적 팩터리 메서드는 전혀 그렇지 않다 
+
+생성자 대신 정적 팩터리 메서드를 제공하는 불변 클래스에서는 정적 팩터리 메서드를 사용해 불필요한 
+
+객체 생성을 피할 수 있다. 31p
+
+**??** 32 ~ 34
+
+결론: 기존 객채를 재사용해야 한다면 새로운 객체를 만들지 마라! 
+
+#### +반복적으로 사용되는 인스턴스 캐싱하기
+캐싱는 데이터나 값을 미리 복사해놓는 임시 저장소를 가리킨다. 캐시는 캐시의 접근 시간에 비해 원래 데이터를 접근
+
+하는 시간이 오래 걸리는 경우나 값을 다시 계산하는 시간을 절약하고 싶은 경우에 사용한다! 즉 미리 복사해 놓으면 
+
+계산이나 접근 시간 없이 더 빠른 속도로 데이터에 접근이 가능함 
+
+캐싱은 이런 캐시라는 작업을 하는 행위.
+
 
