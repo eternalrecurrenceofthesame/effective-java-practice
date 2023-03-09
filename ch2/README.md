@@ -258,5 +258,144 @@ catch(exception e){
 
 근데 @Transactional 어노테이션 사용시 프록시 객체를 주입받아서 쓰기 때문에 문제 없을듯?
 
+* 맵의 키를 사용자 객체로 정의할 때는 equals(),hashcode()를 만들어 주자.
+```
+public class CustomKey {
+
+    private String name;
+
+    public CustomKey(String name){
+        this.name = name;
+    }
+  public static void main(String[] args) {
+        HashMap<CustomKey, String> map = new HashMap<>();
+
+        map.put(new CustomKey("key"), "value");
+        String val = map.get(new CustomKey("key"));
+
+        System.out.println(val);
+      
+    }
+}
+```
+equals hashcode 구현 안하면 값을 찾아오지 못함, 그리고 계속 데이터가 쌓여 메모리 누수가 발생한다.
+
+* 맵의 키를 사용자 객체로 정의 하면서 equals(), hashcode()를 재정의 하였지만 키 값이 불변 데이터가 아니라서 데이터 비교시 계속 변하게 되는 경우
+```
+public class MutableCustomKey {
+
+    private String name;
+
+    public MutableCustomKey(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MutableCustomKey that = (MutableCustomKey) o;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
+    }
+
+    public static void main(String[] args) {
+        MutableCustomKey key = new MutableCustomKey("ferrariKey");
+
+        HashMap<MutableCustomKey, String> map = new HashMap<>();
+        map.put(key, "ferrari");
+
+        MutableCustomKey refKey = new MutableCustomKey("ferrariKey");
+        String val = map.get(refKey);
+        System.out.println("value found " + val);
+
+        key.setName("key2");
+
+        String val1 = map.get(refKey);
+
+        System.out.println("Due to MutableKey value not found " + val1);
+        
+    }
+
+```
+키가 변하면 값을 찾을 수 없지만, Map 에서는 참조가 있으므로 메모리 누수가 발생한다.
+
+https://junghyungil.tistory.com/133
+
+
+#### ++ 다 쓴 객체 참조 해제 (자료 구조)
+
+Stack 클래스는 메모리 누수에 취약하다. 스택은 elements 배열로 저장소 풀을 만들고 원소들을 관리
+
+배열의 활성 영역에 속한 원소들이 사용되고 비활성 영역은 사용되지 않음 문제는 가비지 컬렉터는 이것을 알지 못하고
+
+비활성 영역에서 참조하는 객체도 똑같이 유용한 객체가 된다. 즉 프로그래머 말고는 비활성 영역의 객체가 쓸모없다는 것을 모름.
+
+```
+public class Stack {
+
+    private Object[] elements;
+    private int size = 0;
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+
+    public Stack(){
+        elements = new Object[DEFAULT_INITIAL_CAPACITY];
+    }
+
+    public void push(Object e){
+        ensureCapacity();
+        elements[size++] = e;
+    }
+     
+    public Object pop(){
+        if(size == 0)
+            throw new EmptyStackException();
+
+        Object result = elements[--size];
+        elements[size] = null; // 다 쓴 참조를 해제하자.
+
+        return result;
+    }
+
+    /**
+     * 원소를 위한 공간을 적어도 하나 이상 확보하고
+     * 배열 크기를 늘려야 할 때마다 대략 두 배씩 늘린다.
+     */
+    private void ensureCapacity(){
+        if(elements.length == size)
+            elements = Arrays.copyOf(elements, 2 * size + 1);
+    }
+```
+
+pop 메서드를 사용 후 비활성 영역의 참조를 해제해주자!!
+```
+public Object pop() {
+if(size == 0)
+throw new EmptyStackException();
+
+Object result = elements [--size];
+
+elements[size] = null; //다 쓴 참조를 해제!!
+
+return result;
+}
+
+```
+
+
+## item 8 finerlizer 와 cleaner 사용을 피하라
+
 
 
