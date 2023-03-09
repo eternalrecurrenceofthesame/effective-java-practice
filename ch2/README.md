@@ -190,6 +190,73 @@ static 변수는 클래스가 생성될 때 메모리를 할당 받고 프로그
 
 3. ?? JNI 프로그램에 의해 동적으로 만들어지고 제거되는 JNI global 객체 참조
 
-* 그외 여러가지 메모리 누수가 발생하는 패턴
- * Integer, Long 같은 래퍼 클래스를 이용한 무의미한 객체 생성
- 
+그 외 여러가지 메모리 누수가 발생하는 패턴들
+* Integer, Long 같은 래퍼 클래스를 이용하여 무의미한 객체를 생성하는 경우
+
+```
+public class Adder {
+
+    public long addIncremental(long l){
+        long sum = 0L;
+        sum = sum + l;
+        return sum;
+    }
+
+    public static void main(String[] args) {
+
+        Adder adder = new Adder();
+        for(Long i = 0L; i<1000; i ++){
+            adder.addIncremental(i);
+        }
+    }
+```
+long 대신 Long을 사용함으로써 오토 박싱으로 인해 sum=sum+l; 반복시 새 객체를 생성해서 불필요한 객체가 생성된다.
+
+* 맵에 캐쉬 데이터를 선언하고 해제하지 않는 경우
+```
+public class Cache {
+    private Map<String, String> map = new HashMap<>();
+
+    public void initCache(){
+        map.put("Honda", "SuperCurb");
+        map.put("AUDI", "A8");
+        map.put("Ferrari", "Purosangue");
+   }
+
+    public Map<String, String> getCache(){
+        return map;
+    }
+
+    public void forEachDisplay(){
+        for(String key : map.keySet()){
+            String val = map.get(key);
+            System.out.println(key + ":" + val);
+        }
+    }
+
+    public static void main(String[] args) {
+        Cache cache = new Cache();
+        cache.initCache();
+
+        cache.forEachDisplay();
+        }
+}
+```
+Map 에는 강력한 참조가 있어서, 내부 객체가 사용되지 않을 때도 GC 대상이 되지 않음  Map 을 더 사용하지 않을 경우
+
+데이터의 메모리를 해제해주자 WeakHashMap 을 사용하면 내부 데이터 초기화 가능. 근데 재사용 못하는게 문제 이러면 캐시가 아닌데?
+
+* 스트림 객체를 사용하고 닫지 않는 경우
+```
+try{
+Connection con = DriverManager.getConnection();
+}
+catch(exception e){
+}
+```
+커넥션 얻고 커넥션 닫아주지 않아도 메모리 누수 발생함.
+
+근데 @Transactional 어노테이션 사용시 프록시 객체를 주입받아서 쓰기 때문에 문제 없을듯?
+
+
+
