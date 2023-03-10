@@ -428,7 +428,7 @@ BufferedInputStream bis = null;
 ```
 try 에서 예외가 터지면 catch 에서 잡고 finally 에서 다 쓴 자원을 close 해줘야함.
 
-catch 에서 예외를 잡지 않는 경우에는 try 에서 예외가 터지고 close 메서드도 실패할 수 있다.
+catch 에서 예외를 잡지 않는 경우에는 try 에서 예외가 터지고 close 메서드도 실패할 수 있다. 48p
 
 이렇게 되면 두 번째 예외가 첫 번째 예외를 완전히 삼켜버리게됨.
 
@@ -446,15 +446,15 @@ try(FileInputStream is = new FileInputStream("file.txt");
            e.printStackTrace();
        }
 ```
-try(...) 안에 InputStream 객체를 만듦 여기에 선언한 변수들은 try 안에서 사용 가능하고 코드의 실행 위치가
+try 안에서 InputStream 객체를 만듦 여기에 선언한 변수들은 try 안에서 사용 가능하고 코드의 실행 위치가
 
 try 문을 벗어나면 try-with-resources 는 try 안에 선언된 객체의 close() 메서드들을 호출해준다. 그렇기 떄문에
 
-finally 에서 close 를 직접 호출하지 않아도 됨, try-with-resources 를 사용해서 코드가 간결하고 유지보수가 쉬워짐
+finally 에서 close 를 직접 호출하지 않아도 됨, try-with-resources 를 사용하면 코드가 간결하고 유지보수가 쉬워짐
 
 
 
-#### + try-with-resources 로 close() 가 호출되는 객체는?
+#### + try-with-resources 사용시 close() 가 호출되는 객체는?
 
 AutoCloseable 을 구현한 객체만 close() 가 호출된다!! BufferedInputStream 의 경우 AutoCloseable 을 구현한 InputStream 을 
 
