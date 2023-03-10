@@ -426,11 +426,11 @@ BufferedInputStream bis = null;
         }
     }
 ```
-try 에서 예외가 터지면 catch 에서 잡고 finally 에서 다 쓴 자원을 close 해줘야함.
+try 에서 예외가 터졌을때 catch 에서 잡고 finally 에서 다 쓴 자원을 close 해주는 메서드.
 
-catch 에서 예외를 잡지 않는 경우에는 try 에서 예외가 터지고 close 메서드도 실패할 수 있다. 48p
-
-이렇게 되면 두 번째 예외가 첫 번째 예외를 완전히 삼켜버리게됨.
+번외로 ? 기기에 물리적인 문제가 생긴다면 try 블록에서 예외를 던지고 물리적인 문제로 close 메서드도 실패할 수 있음
+ 
+이렇게 되면 두 번째 예외가 첫 번째 예외를 완전히 삼켜버리게됨. 48p
 
 이러한 문제들은 자바 7 try-with-resourcese 로 해결할 수 있음.
 
