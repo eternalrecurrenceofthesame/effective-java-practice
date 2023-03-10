@@ -397,6 +397,21 @@ return result;
 
 ## ?? item 8 finerlizer 와 cleaner 사용을 피하라
 
+파일이나 스레드 등 종료해야 할 자원을 담고 있는 객체의 클래스에서 finalizer 나 cleaner 를 대신할 수 있는 방법으로
+
+AutoCloseable 을 구현하고 인스턴스를 쓰고난 후 close 메서드를 호출하면 된다. 
+
+일반적으로 예외가 발생해도 제대로 종료되도록 try-with-resources 를 사용하면 됨 AutoCloseable 구현과 관련해서
+
+각 인스턴스는 자신이 닫혔는지를 추적하는 것이 좋음. close 메서드에서 유효하지 않음을 필드에 기록하고 다른 메서드는
+
+이 필드를 검사해서 객체가 닫힌 후에 호출했다면 IllegalStateException 을 던지는 것 43p
+
+
+#### ?? + cleaner 와 finalizer 는 어디에서 쓰이는가?
+
+
+
 ## item 9 try-finally 보다는 try-with-resources 를 사용하라
 
 자바 라이브러리에는 close 메서드를 호출해 직접 닫아줘야 하는 자원이 많음
@@ -428,7 +443,7 @@ BufferedInputStream bis = null;
 ```
 try 에서 예외가 터졌을때 catch 에서 잡고 finally 에서 다 쓴 자원을 close 해주는 메서드.
 
-번외로 ? 기기에 물리적인 문제가 생긴다면 try 블록에서 예외를 던지고 물리적인 문제로 close 메서드도 실패할 수 있음
+번외로 ?? 기기에 물리적인 문제가 생긴다면 try 블록에서 예외를 던지고 물리적인 문제로 close 메서드도 실패할 수 있음
  
 이렇게 되면 두 번째 예외가 첫 번째 예외를 완전히 삼켜버리게됨. 48p
 
