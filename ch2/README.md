@@ -395,7 +395,75 @@ return result;
 ```
 
 
-## item 8 finerlizer 와 cleaner 사용을 피하라
+## ?? item 8 finerlizer 와 cleaner 사용을 피하라
+
+## item 9 try-finally 보다는 try-with-resources 를 사용하라
+
+자바 라이브러리에는 close 메서드를 호출해 직접 닫아줘야 하는 자원이 많음
+
+InputStream, OutputStream, Connection 얻고 닫기 등등 이런 자원 닫기 문제들은 놓치기 쉬워서 예측할 수 없는
+
+성능 문제로 이어질 수 있다.
+
+Java 7 이전에는 try-catch-finally 구문에서 자원을 close 하려면 코드가 많고 지저분했다.
+
+```
+FileInputStream is = null;
+BufferedInputStream bis = null;
+        try {
+            is = new FileInputStream("file.txt");
+            bis = new BufferedInputStream(is);
+
+            int data = -1;
+            while ((data = bis.read()) != -1) {
+                System.out.println((char) data);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        } finally{
+            if(is != null) is.close();
+            if(bis != null) bis.close();
+        }
+    }
+```
+try 에서 예외가 터지면 catch 에서 잡고 finally 에서 다 쓴 자원을 close 해줘야함.
+
+catch 에서 예외를 잡지 않는 경우에는 try 에서 예외가 터지고 close 메서드도 실패할 수 있다.
+
+이렇게 되면 두 번째 예외가 첫 번째 예외를 완전히 삼켜버리게됨.
+
+이러한 문제들은 자바 7 try-with-resourcese 로 해결할 수 있음.
+
+
+```
+try(FileInputStream is = new FileInputStream("file.txt");
+     BufferedInputStream bis = new BufferedInputStream(is)){
+           int data = -1;
+           while((data = bis.read()) != -1){
+               System.out.println((char) data);
+           }
+       }catch(IOException e){
+           e.printStackTrace();
+       }
+```
+try(...) 안에 InputStream 객체를 만듦 여기에 선언한 변수들은 try 안에서 사용 가능하고 코드의 실행 위치가
+
+try 문을 벗어나면 try-with-resources 는 try 안에 선언된 객체의 close() 메서드들을 호출해준다. 그렇기 떄문에
+
+finally 에서 close 를 직접 호출하지 않아도 됨, try-with-resources 를 사용해서 코드가 간결하고 유지보수가 쉬워짐
+
+
+
+#### + try-with-resources 로 close() 가 호출되는 객체는?
+
+AutoCloseable 을 구현한 객체만 close() 가 호출된다!! BufferedInputStream 의 경우 AutoCloseable 을 구현한 InputStream 을 
+
+상속 받았기 때문에 적용됨.
+
+
+직접 만든 클래스가 try-with-resources 로 자원을 해제하고 싶으면 AutoCloseable 을 구현하면 된다.
+
+https://codechacha.com/ko/java-try-with-resources/
 
 
 
