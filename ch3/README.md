@@ -22,7 +22,51 @@ contains 메서드를 호출하면 인스턴스가 없다고 답할 것이다. (
 
 * **대칭성이란?**
 
-대칭성은 두 객체는 서로에 대한 동치 여부에 똑같이 답해야 한다는 뜻이다.
+대칭성은 두 객체는 서로에 대한 동치 여부에 똑같이 답해야 한다는 뜻이다. 즉 두 객체를 비교했을 때 단순히 값이 같다고 해서
+
+true 를 반환하는 것이 아닌 동치 여부에 따라서 ?? 교집합에 묶인 같은 값을 true 로 반환해야 한다는 의미
+
+```
+public final class CaseInsensitiveString {
+
+    private final String s;
+
+    public CaseInsensitiveString(String s) {
+        this.s = s;
+    }
+
+    // 대칭성 위배
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof  CaseInsensitiveString)
+            return s.equalsIgnoreCase(
+                    ((CaseInsensitiveString) o).s);
+
+        if(o instanceof String)
+            return s.equalsIgnoreCase((String) o);
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        CaseInsensitiveString cis = new CaseInsensitiveString("Ferrari");
+        String s = "Ferrari";
+
+        cis.equals(s);
+        s.equalsIgnoreCase(cis);
+    }
+```
+cis.equals(s) 는 true 를 반환하지만 s.equals(cis)는 false 임 cis 의 equals 는 일반 String 을 알고 있지만, 문제는
+
+String s 의 equals 는 Cis 의 존재를 모르는 데 있음 이 문제를 해결하려면 Cis 의 equals 를 String 과 연동하면 안 됨.
+
+```
+@Override public boolean equals(Object o){
+return o instanceof CaseInsensitiveString && ((CaseInsensitiveString) o).s.equalsIgnoreCase(s);
+```
+수정 코드 
+
+
 
 * **추이성이란?**
 
