@@ -16,3 +16,45 @@
 
 **반사성이란?**
 
+객체는 자기 자신과 같아야 한다는 뜻. 이 요건을 어긴 클래스의 인스턴스를 컬렉션에 넣은 다음
+
+contains 메서드를 호출하면 인스턴스가 없다고 답할 것이다. (이걸 어떻게 어김?)
+
+**대칭성이란?**
+
+대칭성은 두 객체는 서로에 대한 동치 여부에 똑같이 답해야 한다는 뜻이다.
+
+**추이성이란?**
+
+첫 번째 객체와 두 번째 객체가 같고, 두 번째 객체와 세 번째 객체가 같다몬 첫 번째 객체도 세 번째
+
+객체와 같아야 한다는 뜻이다.
+
+```
+class Point
+@Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Point))
+            return false;
+
+        Point p = (Point) o;
+        return p.x == x && p.y == y;
+    }
+    
+    
+class ColorPoint extends Point
+
+@Override
+  public boolean equals(Object o) {
+        if(!(o instanceof ColorPoint))
+            return false;
+        return super.equals(o) && ((ColorPoint) o).color == color;
+    }
+
+p.equals(cp); // true
+cp.equals(p); // false
+```
+이 경우는 동치성을 위배하게 된다. 포인트의 경우에는 타입이 같기 때문에 true 를 반환하지만
+
+컬러 포인트는 매개변수의 클래스 종류가 다르기 때문에 false 를 반환해서 동치성 위반 !
+
