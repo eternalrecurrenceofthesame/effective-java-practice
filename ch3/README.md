@@ -72,9 +72,7 @@ return o instanceof CaseInsensitiveString && ((CaseInsensitiveString) o).s.equal
 
 * **추이성이란?**
 
-첫 번째 객체와 두 번째 객체가 같고, 두 번째 객체와 세 번째 객체가 같다면 첫 번째 객체도 세 번째
-
-객체와 같아야 한다는 뜻이다.
+첫 번째 객체와 두 번째 객체가 같고, 두 번째 객체와 세 번째 객체가 같다면 첫 번째 객체도 세 번째 객체와 같아야 한다는 뜻이다.
 
 ```
 class Point
