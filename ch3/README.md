@@ -55,7 +55,7 @@ public final class CaseInsensitiveString {
         String s = "Ferrari";
 
         cis.equals(s);
-        s.equalsIgnoreCase(cis);
+        s.equals(cis);
     }
 ```
 cis.equals(s) 는 true 를 반환하지만 s.equals(cis)는 false 임 cis 의 equals 는 일반 String 을 알고 있지만, 문제는
@@ -66,7 +66,7 @@ String s 의 equals 는 Cis 의 존재를 모르는 데 있음 이 문제를 해
 @Override public boolean equals(Object o){
 return o instanceof CaseInsensitiveString && ((CaseInsensitiveString) o).s.equalsIgnoreCase(s);
 ```
-수정 코드 
+수정 코드 둘 다 false 
 
 
 
@@ -110,19 +110,19 @@ class ColorPoint extends Point
   public boolean equals(Object o) {
         if(!(o instanceof ColorPoint))
             return false;
-        return super.equals(o) && ((ColorPoint) o).color == color;
+        return super.equals(o) && ((ColorPoint) o).color == color; // 대칭성 위배
     }
 
 
-new Point(1,2);
-new ColorPoint(1,2,RED);
+p = new Point(1,2);
+cp = new ColorPoint(1,2,RED);
 
 p.equals(cp); // true
 cp.equals(p); // false
 ```
-이 경우는 동치성을 위배하게 된다. 포인트의 경우에는 타입이 같기 때문에 true 를 반환하지만
+이 경우는 **대칭성**을 위배하게 된다. 포인트의 경우에는 타입이 같기 때문에 true 를 반환하지만
 
-컬러 포인트는 매개변수의 클래스 종류가 다르기 때문에 false 를 반환해서 동치성 위반 !
+컬러 포인트는 매개변수의 클래스 종류가 다르기 때문에 false 를 반환해서 대칭성 위반 !
 
 
 ```
@@ -148,7 +148,7 @@ cp.equals(p); // false
         p2.equals(p3); // true
         p3.equals(p1); // false
 ```
-추이성을 위배한 코드! p1 p2, p2 p3 비교에서는 색상을 무시하지만 p1 p3 는 색상까지 고려하기 떄문
+**추이성**을 위배한 코드! p1 p2, p2 p3 비교에서는 색상을 무시하지만 p1 p3 는 색상까지 고려하기 떄문
 
 또한 이 방식은 무한 재귀에 빠질 위험도 있음. Point 의 또 다른 하위 클래스 SmellPoint 생성한다고 했을 때 
 
