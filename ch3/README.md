@@ -26,6 +26,8 @@ contains 메서드를 호출하면 인스턴스가 없다고 답할 것이다. (
 
 true 를 반환하는 것이 아닌 동치 여부에 따라서 ?? 교집합에 묶인 같은 값을 true 로 반환해야 한다는 의미
 
+x,y 에 대해 x.equals(y) 가 ture 면 y.equals(x) 도 true 가 돼야 한다!
+
 ```
 public final class CaseInsensitiveString {
 
