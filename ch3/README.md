@@ -303,6 +303,7 @@ public class Rectangle extends Shape {
 
 정 사각형의 경우 높이 너비가 모두 같기 때문에 같은 값을 하나만 넣어주면 된다.
 
+https://blog.itcode.dev/posts/2021/08/15/liskov-subsitution-principle
 
 
 
