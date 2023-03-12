@@ -49,7 +49,6 @@ public final class CaseInsensitiveString {
 
         return false;
     }
-
     public static void main(String[] args) {
         CaseInsensitiveString cis = new CaseInsensitiveString("Ferrari");
         String s = "Ferrari";
@@ -202,12 +201,106 @@ public class ColorPoint{
 
 즉 인터페이스가 의도한 대로 객체를 생성하라는 의미.
 
-상속관계의 경우에는 부모 동작에서 자식 객체가 부모 객체를 완전히 대체할 수 있다는 원칙을 말한다.
+상속관계의 경우에는 부모 객체를 호출하는 동작에서 자식 객체가 부모 객체를 완전히 대체할 수 있다는 원칙을 말한다.
+
+
+* 위반 사례
+```
+// 직사각형
+@Getter
+@Setter
+public class Rectangle {  
+    protected int width;
+    protected int height;
+
+    // 넓이 반환
+    public int getArea(){
+        return width * height;
+    }
+}
+
+
+// 정사각형
+@Getter
+@Setter
+public class Square extends Rectangle{
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        super.setHeight(getWidth());
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        super.setWidth(getHeight());
+    }
+}
+
+Rectangle rectangle = new Rectangle();
+        rectangle.setWidth(10);
+        rectangle.setHeight(5);
+        
+        50
+        
+Rectangle rectangle2 = new Square();
+
+        rectangle2.setWidth(10);
+        rectangle2.setHeight(5);
+        
+       25  
+```
+언뜻 보면 직사각형과 정사각형은 서로 비슷한 카테고리에 묶여 있는 것 처럼 보인다.
+
+직사각형을 상속받은 정사각형을 구현하면 자식 객체인 정사각형도 직사각형의 역할을 할 수 있을 것 같지만 그렇지 않다. 
+
+직사각형과 다르게 정사각형은 가로 세로의 길이가 모두 같아야 하기 때문에 서로 다른 값을 가질 수 없음.
+
+즉 상위 클래스가 의도한 역할을 대체할 수 없어서 리스코프 치환 원칙에 위배된다.
 
 ```
+// 사각형
+@Getter
+@Setter
+public class Shape {
 
+    protected int width;
+    protected int height;
+
+    public int getArea(){
+        return width * height;
+    }
+}
+
+
+// 정사각형
+@Getter
+@Setter
+public class Square extends Shape{
+
+    public Square(int length){
+        super.setWidth(length);
+        super.setHeight(length);
+    }
+}
+
+// 직 사각형
+@Getter
+@Setter
+public class Rectangle extends Shape {
+
+    public Rectangle(int width, int height) {
+
+       super.setWidth(width);
+       super.setHeight(height);
+    }
+}
 
 ```
+이런 경우 부모 클래스로 직사각형 정사각형 역할을 모두 할 수 있는 사각형 클래스를 만들어서 기능을 수행하게 해야한다.
+
+정 사각형의 경우 높이 너비가 모두 같기 때문에 같은 값을 하나만 넣어주면 된다.
 
 
 
