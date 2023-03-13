@@ -204,7 +204,7 @@ public class ColorPoint{
 상속관계의 경우에는 부모 객체를 호출하는 동작에서 자식 객체가 부모 객체의 동작을 완벽히 대체할 수 있다는 원칙을 말한다.
 
 
-* 위반 사례
+<위반 사례>
 ```
 // 직사각형
 @Getter
@@ -259,7 +259,7 @@ Rectangle rectangle2 = new Square();
 
 즉 상위 클래스가 의도한 역할을 대체할 수 없어서 리스코프 치환 원칙에 위배된다.
 
-* 리스코프 치환 원칙 준수
+<리스코프 치환 원칙 준수>
 ```
 // 사각형
 @Getter
@@ -304,6 +304,45 @@ public class Rectangle extends Shape {
 정 사각형의 경우 높이 너비가 모두 같기 때문에 같은 값을 하나만 넣어주면 된다.
 
 https://blog.itcode.dev/posts/2021/08/15/liskov-subsitution-principle
+
+
+* **일관성이란?**
+
+두 객체가 같다면 앞으로도 영원히 같아야 한다! 가변 객체는 비교 시점에 따라 서로 다를 수도 혹은 같을 수도 있는 반면,
+
+불변 객체는 한번 다르면 끝까지 달라야 한다. ?? equals 는 항시 메모리에 존재하는 객체만을 사용한 결정적 계산만 수행해야 한다.
+
+
+* **null-아님**
+```
+// 묵시적 null 검사
+@Override
+public boolean equals(Object o){
+if(!(o instanceof MyType))
+return false;
+
+MyType mt = (MyType) o;
+...
+}
+```
+
+equals 가 타입을 확인하지 않으면 잘못된 타입이 인수로 주어졌을 때 ClassCastException을 던져서 일반 규약을 위배하게 된다.
+
+그런데 instanceof 를 사용하면 두번째 연산자와 무관한게 첫 번째 피연산자가 null 일때 false 를 반환하기 때문에 따로 null 체크를 하지 않아도 된다.
+
+
+#### ++equals 메서드 구현 방법 단계별 정리 및 적용
+
+1. == 연산자를 사용해 입력이 자기 자신의 참조인지 확인한다.
+
+2. instanceof 연산자로 입력이 올바른 타입인지 확인한다. (null 체킹까지 해줌)
+
+3. 입력을 올바른 타입으로 형변환 한다.
+
+4. 입력 객체와 자기 자신의 대응되는 핵심 필드들이 모두 일치하는지 하나씩 검사!
+
+PohneNumber.class 참고.
+
 
 
 
