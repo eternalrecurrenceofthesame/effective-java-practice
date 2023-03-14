@@ -348,13 +348,14 @@ PohneNumber.class 참고.
 
 ## item 11 equals 를 재정의하려거든 hashCode 도 재정의 하라
 
-해쉬 코드란? 객체의 위치와 관련된 값으로, 실제 위치값이 아닌 객체의 위칫값을 기준으로 생성된 고윳값이다.
+해쉬 코드란? 객체의 위치와 관련된 값으로, 실제 위치값이 아닌 객체의 위칫값을 기준으로 생성된 고윳값이다. HashMap 자료 구조는 
 
-HashMap 자료 구조는 데이터를 key value 쌍으로 저장하는데 key 값은 중복되지 않는다. 
+데이터를 key value 쌍으로 저장하는데 key 값은 중복되지 않는다. 
 
-HashMap 에 새로운 값을 넣을 때 먼저 key 값을 비교하는데 이때 객체의 해쉬코드 값을 먼저 비교하고 true 면 equals 를 호출해서 동일한 객체인지 체크한다.
+HashMap 에 새로운 값을 넣을 때 먼저 key 값을 비교하는데 이때 객체의 해쉬코드 값을 먼저 비교하고 true 면 equals 를 
 
-해쉬 코드 예시들
+호출해서 동일한 객체인지 체크한다.
+
 ```
 @Override public int hashCode() { return 42; } // <-- 안티 패턴
 ```
@@ -377,6 +378,8 @@ return Objects.hash(lineNum,prefix,areCode); // 한줄 해쉬는 성능이 아�
 ```
 
 ```
+캐싱을 이용한 해쉬코드 , 매번 새로 계산하기에 해쉬 코드 계산 비용이 클 때 사용 성능을 높인다고 핵심 필드를 생략하면 안 된다!
+
 private int hashCode; // 자동으로 0 초기화
 
 @Override public int hashCode(){
@@ -389,7 +392,6 @@ hashCode = result;
 }
 return result;
 ```
-캐싱을 이용한 해쉬코드 , 매번 새로 계산하기에 해쉬 코드 계산 비용이 클 때 사용 성능을 높인다고 핵심 필드를 생략하면 안 된다!
 
 hashCode 가 반환하는 값의 생성 규칙을 API 사용자에게 자세히 공표하지 말자! 그래야 클라이언트가 ?? 이 값에 의존하지 않게 되고 추후에
 
