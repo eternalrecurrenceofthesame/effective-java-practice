@@ -346,3 +346,62 @@ PohneNumber.class 참고.
 참고로 대부분의 IDE 에서 equals hashcode 를 만들어주기 때문에 이거를 그대로 쓰면됨... 그외 롬복이라는 아주 좋은 녀석이 있다!
 
 
+## item 11 equals 를 재정의하려거든 hashCode 도 재정의 하라
+
+해쉬 코드란? 객체의 위치와 관련된 값으로, 실제 위치값이 아닌 객체의 위칫값을 기준으로 생성된 고윳값이다.
+
+HashMap 자료 구조는 데이터를 key value 쌍으로 저장하는데 key 값은 중복되지 않는다. 
+
+HashMap 에 새로운 값을 넣을 때 먼저 key 값을 비교하는데 이때 객체의 해쉬코드 값을 먼저 비교하고 true 면 equals 를 호출해서 동일한 객체인지 체크한다.
+
+해쉬 코드 예시들
+```
+@Override public int hashCode() { return 42; } // <-- 안티 패턴
+```
+
+```
+PhoneNumber 인스턴스의 핵심 필드 3 개만을 사용한 간단한 해쉬코드 
+
+@Override public int hashCode(){
+int result = Short.hashCode(areaCode);
+result = 31 * result + Short.hashCode(prefix);  // 해쉬 값을 구할 때 31 이 안정적이고 좋음 70p
+result = 31 * result + Shrot.hashCode(lineNum);
+return result;
+}
+```
+
+```
+@Override public int hashCode(){
+return Objects.hash(lineNum,prefix,areCode); // 한줄 해쉬는 성능이 아쉬울 수 있다!
+}
+```
+
+```
+private int hashCode; // 자동으로 0 초기화
+
+@Override public int hashCode(){
+int result = hashCode;
+if(result == 0){
+result = Short.hashCode(areaCode);
+result = 31 * result + Short.hashCode(prefix);
+result = 31 * result + Short.hashCode(lineNum);
+hashCode = result;
+}
+return result;
+```
+캐싱을 이용한 해쉬코드 , 매번 새로 계산하기에 해쉬 코드 계산 비용이 클 때 사용 성능을 높인다고 핵심 필드를 생략하면 안 된다!
+
+hashCode 가 반환하는 값의 생성 규칙을 API 사용자에게 자세히 공표하지 말자! 그래야 클라이언트가 ?? 이 값에 의존하지 않게 되고 추후에
+
+계산 방식을 바꿀 수 있다!
+
+정리하자면 핵심 필드를 이용해서 해쉬코드를 만들어주자
+
+1. 기본 타입 필드 Type.hashCode
+
+2. ?? 참조 타입 필드 69p
+
+3. ?? 배열 필드 Arrays.hashCode
+
+결론은 IDE , AutoValue 프레임 워크 사용시 equals hashCode 를 자동으로 만들어 준다!!
+
