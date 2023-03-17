@@ -460,3 +460,60 @@ toString 구현시 반환값의 포맷을 문서화할지 결정해야 한다. �
 하지면 결론은 이 녀석도 IDE 나 AutoValue 가 자동으로 만들어 준다. 자동 생성에 적합한 경우 자동생성으로 맡기고 그렇지 않은 폰 넘버 같은 경우에는 직접 만들면 됨.
 
 #### + 참고로 JPA 에서 양방향 연관관계에 있는 엔티티들은 자동으로 toStirng 을 만들 경우 양방향 참조가 걸려서 무한 루프에 빠지기 때문에 조심해야 한다!
+
+
+## item 13 clone 재정의는 주의해서 진행하라
+
+일반적으로 clone 메서드를 사용하면 클래스에 있는 값을 복사해서 새로운 인스턴스 주소를 만들어준다.
+
+클래스 내에 배열, 컬렉션 필드가 있는 경우에는 따로 clone 메서드를 재정의해서 배열, 컬렉션을 복사해주지 않으면 같은 배열과 컬렉션을 공유하기 때문에 
+
+원본이나 복제본 중 다른 하나를 수정하면 둘 다 같은 값으로 변경되는 문제가 발생한다! 
+
+```
+public class Stack implements Cloneable{
+    private Object[] elements;
+    private int size = 0;
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+
+    public Stack() {
+        this.elements = new Object[DEFAULT_INITIAL_CAPACITY];
+    }
+
+    public void push(Object e){
+        ensureCapacity();
+        elements[size++] = e;
+    }
+
+
+    public Object pop(){
+        if(size == 0)
+            throw new EmptyStackException();
+
+        Object result = elements[--size];
+        elements[size] = null; // 다 쓴 참조 해제
+        return result;
+    }
+
+    // 원소를 위한 공간을 적어도 하나 이상 확보
+    private void ensureCapacity(){
+        if(elements.length == size)
+            elements = Arrays.copyOf(elements, 2 * size + 1);
+    }
+
+
+    @Override  // clone 을 오버라이딩 해서 배열도 복사해주자! 동시에 Stack 클래스를 반환하게 해서 형변환을 따로 안해줘도 됨!
+    protected Stack clone() throws CloneNotSupportedException {
+        try{
+            Stack result = (Stack) super.clone();
+            result.elements = elements.clone();
+            return result;
+        }catch(CloneNotSupportedException e){
+            throw new AssertionError();
+        }
+    }
+
+```
+
+?? HashTable 부분 82p
+
