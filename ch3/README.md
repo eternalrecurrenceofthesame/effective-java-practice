@@ -556,12 +556,13 @@ System.out.println(str.compareTo("abcd")); // 0 같을 때는 0
 
 System.out.println(str.compareTo("ab")); // 2 비교대상 값이 포함되어 있는 경우 서로의 문자열 길이의 차이를 리턴한다.
 System.out.println(str.compareTo("a")); // 3
+System.out.println("".compareTo(str)); // -4 
 
-System.out.println(str.compareTo("c")); // -2 처음 위치에서 비교를 실패한다면 a 와 c 의 아스키 코드 값의 차이를 리턴한다.
+System.out.println(str.compareTo("c")); // -2 비교 대상의 값이 다를 경우 a 와 c 의 아스키 코드 값의 차이를 리턴한다.
                                            a=97 , c=99
 
-System.out.println(str.compareTo("h")); // -7 a부터 비교 실패 a=97, h=104
-System.out.println(str.compareTo("abfd"); // -3 c 와 f 가 비교 실패 c=99, f=102  
+System.out.println(str.compareTo("h")); // -7 a 비교 대상이 다름 a=97, h=104
+System.out.println(str.compareTo("abfd"); // -3 c 와 f 비교 대상이 다름 c=99, f=102  
 
 
 * 비교대상과 전혀 다른 문자열인 경우
