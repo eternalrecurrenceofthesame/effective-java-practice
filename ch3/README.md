@@ -517,3 +517,56 @@ public class Stack implements Cloneable{
 
 ?? HashTable 부분 82p
 
+## item 14 Comparable 을 구현할지 고려하라
+
+compareTo 란? 
+
+두 개의 값을 비교하여 int 값을 반환 하는 함수
+```
+숫자 비교 - 크다(1), 같다(0), 작다(-1)
+문자열 비교 - 같다(0), 그외 양수/음수값 반환
+```
+
+* 숫자형 비교
+```
+Integer x = 3;
+Integer y = 4;
+Double z = 1.0;
+
+System.out.println(x.compareTo(y)); // -1 작다
+System.out.println(x.compareTo(3)); // 0 같다
+System.out.println(x.compareTo(2)); // 1 크다
+System.out.println(z.compareTo(3.3)); // -1 작다
+
+int 타입을 사용하는 경우
+
+int x = 4;
+int y = 5;
+
+Integer.compare(x,y) // Integer.compare 를 사용하면 된다.
+```
+
+* 문자열 비교
+```
+String str = "abcd";
+
+* 비교 대상에 문자열이 포함되어 있을 때
+
+System.out.println(str.compareTo("abcd")); // 0 같을 때는 0
+
+System.out.println(str.compareTo("ab")); // 2 비교대상 값이 포함되어 있는 경우 서로의 문자열 길이의 차이를 리턴한다.
+System.out.println(str.compareTo("a")); // 3
+
+System.out.println(str.compareTo("c")); // -2 처음 위치에서 비교를 실패한다면 a 와 c 의 아스키 코드 값의 차이를 리턴한다.
+                                           a=97 , c=99
+
+System.out.println(str.compareTo("h")); // -7 a부터 비교 실패 a=97, h=104
+System.out.println(str.compareTo("abfd"); // -3 c 와 f 가 비교 실패 c=99, f=102  
+
+
+* 비교대상과 전혀 다른 문자열인 경우
+
+System.out.println(str.compareTo("ABCD")); // 32 대소 문자가 다르면 비교 못함!  a=97 , A=65
+                    
+```
+
