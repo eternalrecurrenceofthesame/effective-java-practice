@@ -570,4 +570,4 @@ System.out.println(str.compareTo("abfd"); // -3 c 와 f 비교 대상이 다름 
 System.out.println(str.compareTo("ABCD")); // 32 대소 문자가 다르면 비교 못함!  a=97 , A=65
                     
 ```
-
+https://mine-it-record.tistory.com/133
